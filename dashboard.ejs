@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(120deg, #b3b3b4, #000000);
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .search-bar {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 70%;
+            box-sizing: border-box;
+        }
+
+        .search-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+        .image-container {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .car-image {
+            width: calc(33.33% - 10px);
+            height: auto;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .car-image {
+                width: calc(50% - 10px);
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            .car-image {
+                width: calc(100% - 10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to your Dashboard, <%= username %>!</h2>
+        <p>Login successful!</p>
+        <input type="text" class="search-bar" id="searchInput" placeholder="Enter place name...">
+        <button class="search-button" onclick="search()">Search</button>
+        <div class="image-container" id="imageContainer"></div>
+    </div>
+
+    <script>
+        function search() {
+            var searchInput = document.getElementById("searchInput").value;
+            var apiUrl = 'https://api.unsplash.com/search/photos?query=' + encodeURIComponent(searchInput) + '&client_id=wBK9EoYIb_KrfTZ_pAcHPtJPEDQ41luU7k29ULidND4';
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayImages(data.results);
+                })
+                .catch(error => console.error('Error fetching images:', error));
+        }
+
+        function displayImages(images) {
+            var imageContainer = document.getElementById("imageContainer");
+            imageContainer.innerHTML = ''; // Clear previous results
+
+            images.forEach(image => {
+                var imgElement = document.createElement("img");
+                imgElement.src = image.urls.regular;
+                imgElement.classList.add("car-image");
+                imageContainer.appendChild(imgElement);
+            });
+        }
+    </script>
+</body>
+</html>
